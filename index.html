@@ -257,6 +257,27 @@ tr.you td { background: var(--accent-lt); color: var(--accent-dk); font-weight: 
 tr.you td:first-child { border-left: 3px solid var(--accent); }
 td.marker { color: var(--accent); font-size: 0.75rem; font-weight: 700; }
 
+.btn-print {
+  display: none;
+  width: 100%; font-family: var(--font); font-size: 0.9rem; font-weight: 600;
+  padding: 0.75rem 1.5rem; margin-top: 0.75rem;
+  background: transparent; color: var(--muted);
+  border: 1.5px solid var(--border); border-radius: 10px;
+  cursor: pointer; transition: all 0.15s; letter-spacing: -0.01em;
+}
+.btn-print:hover { border-color: var(--accent); color: var(--accent); }
+.btn-print.visible { display: block; }
+
+@media print {
+  .topbar, .lang-toggle, header .privacy-badge,
+  #nhg-card, #main-form, .btn-print, footer { display: none !important; }
+  body { background: white; padding: 0; }
+  .wrap { max-width: 100%; }
+  .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+  #results { display: block !important; }
+  .result-banner { border: 1px solid #ccc !important; }
+}
+
 .table-caveat {
   font-size: 0.73rem; color: var(--muted); margin-top: 0.65rem;
   line-height: 1.55; font-style: italic;
@@ -443,6 +464,8 @@ footer a { color: var(--accent); }
     </div>
 
     <div class="tip-card" id="tip-card" style="display:none" data-t="tip"></div>
+
+    <button class="btn-print" onclick="window.print()" data-t="print_btn"></button>
   </div>
 
   <!-- Footer -->
@@ -475,8 +498,8 @@ const T = {
     form_title:     "Stap 3 — Vul je gegevens in",
     woz_label:      "WOZ-waarde",
     woz_hint:       "van wozwaardeloket.nl",
-    bank_label:     "Waarde die je bank gebruikte",
-    bank_hint:      "uit je hypotheekofferte",
+    bank_label:     "Waarde die je bank als laatste gebruikte",
+    bank_hint:      "te vinden in je bank-app of hypotheekdocumenten",
     debt_title:     "Hoeveel hypotheek heb je nog?",
     add_part:       "Hypotheekdeel toevoegen",
     part_label:     "Deel",
@@ -501,17 +524,17 @@ const T = {
     s_rate_lbl:     "Mogelijke renteverlaging",
     s_month_lbl:    "Per maand minder",
     s_year_lbl:     "Per jaar minder",
-    savings_note:   "Ruwe schatting op basis van ~0,25% per drempelwaarde. Je werkelijke voordeel hangt af van de exacte klassen van jouw bank.",
+    savings_note:   "Ruwe schatting. De risico-opslag bij Nederlandse banken loopt typisch op van 0,1 tot 1 procentpunt afhankelijk van je risicoklasse. Het werkelijke voordeel hangt af van je bank, product en hypotheekcontract.",
     steps_title:    "Wat kun je nu doen?",
     steps: [
-      ["1", "Screenshot de WOZ-waarde",
-            'Ga naar <a href="https://www.wozwaardeloket.nl" target="_blank" rel="noopener">wozwaardeloket.nl</a> en maak een screenshot. Je hebt hem straks nodig als bewijs.'],
-      ["2", "Vraag je bank om de exacte klassen",
-            "Vraag welke LTV-drempelwaarden jouw hypotheek heeft. Dit staat in je hypotheekofferte, of je kunt het navragen via de app of telefoon. Banken zijn verplicht dit te delen."],
+      ["1", "Download je WOZ-waarde als PDF",
+            'Ga naar <a href="https://www.wozwaardeloket.nl" target="_blank" rel="noopener">wozwaardeloket.nl</a>, zoek je adres op en sla de pagina op als PDF (in je browser: Afdrukken → Opslaan als PDF). Banken accepteren dit als officieel bewijs.'],
+      ["2", "Neem contact op met je bank",
+            "Sommige banken hebben een optie in de app — zoek op 'renteherziening' of 'woningwaarde aanpassen'. Kun je het niet snel vinden? Geen stress. Stuur gewoon een berichtje via de chat in de app of bel ze op. Leg uit dat je woningwaarde is gestegen en je een tariefherziening wilt aanvragen."],
       ["3", "Dien een herzieningsverzoek in",
-            "Zeg dat je LTV is gedaald en vraag om herbeoordeling van je rentetarief. Stuur de WOZ-waarde mee. Een gewone mail of bericht via de app is genoeg."],
-      ["4", "Geen oversluiting, geen kosten",
-            "Je sluit geen nieuwe hypotheek af. Banken zijn wettelijk verplicht de rente aan te passen als je in een lagere klasse valt — ook midden in een rentevaste periode. Duurt gemiddeld 4–8 weken."],
+            "Stuur je WOZ-waarde als PDF mee en vraag om herbeoordeling van je rentetarief op basis van je gedaalde LTV. Of en wanneer je bank dit doorvoert hangt af van de voorwaarden in jouw hypotheekcontract — sommige banken doen het tijdens de rentevaste periode, andere alleen bij het verlopen ervan. Vraag je bank dit expliciet na."],
+      ["4", "Geen oversluiting, geen notariskosten",
+            "Je sluit geen nieuwe hypotheek af. Als de bank akkoord gaat, is het een aanpassing van je bestaande tarief. Houd er rekening mee dat hypotheken complex kunnen zijn — de uitkomst verschilt per bank, product en contract."],
     ],
     banner_good: (o, n, v, w) => `Je LTV is gedaald van <strong>${o}%</strong> naar <strong>${n}%</strong> — dat is goed nieuws. Op basis van de ${w} van €${v} is de kans groot dat je nu recht hebt op een lagere rente. Of dat zo is hangt af van de exacte drempelwaarden van jouw bank.`,
     banner_same: (o, n) => `Je LTV daalde van <strong>${o}%</strong> naar <strong>${n}%</strong>. Of dat genoeg is voor een lager tarief hangt af van de drempelwaarden van jouw bank — het is de moeite waard om het na te vragen.`,
@@ -521,6 +544,7 @@ const T = {
     footer_legal:   "Indicatieve tool, geen hypotheekadvies. Tariefvoordeel geldt alleen bij hypotheken zonder NHG. · <a href=\"https://www.wozwaardeloket.nl\" target=\"_blank\" rel=\"noopener\">WOZ Waardeloket</a>",
     which_woz:  "WOZ-waarde",
     which_bank: "bankwaarde",
+    print_btn:  "🖨 Sla op als PDF / Afdrukken",
   },
   en: {
     eyebrow:        "Mortgage rate check",
@@ -539,8 +563,8 @@ const T = {
     form_title:     "Step 3 — Enter your details",
     woz_label:      "WOZ value",
     woz_hint:       "from wozwaardeloket.nl",
-    bank_label:     "Value your bank used",
-    bank_hint:      "from your mortgage offer",
+    bank_label:     "Last value your bank used",
+    bank_hint:      "find it in your bank app or mortgage documents",
     debt_title:     "How much mortgage do you still have?",
     add_part:       "Add mortgage part",
     part_label:     "Part",
@@ -565,17 +589,17 @@ const T = {
     s_rate_lbl:     "Possible rate reduction",
     s_month_lbl:    "Less per month",
     s_year_lbl:     "Less per year",
-    savings_note:   "Rough estimate based on ~0.25% per threshold. Your actual saving depends on the exact brackets your bank uses.",
+    savings_note:   "Rough estimate. Risk surcharges at Dutch banks typically range from 0.1 to 1 percentage point depending on your risk class. Your actual saving depends on your bank, product and mortgage contract.",
     steps_title:    "What can you do now?",
     steps: [
-      ["1", "Screenshot your WOZ value",
-            'Go to <a href="https://www.wozwaardeloket.nl" target="_blank" rel="noopener">wozwaardeloket.nl</a> and take a screenshot. You\'ll need it as proof shortly.'],
-      ["2", "Ask your bank for their exact brackets",
-            "Ask which LTV thresholds apply to your mortgage. This is in your mortgage offer, or you can ask via the app or phone. Banks are required to share this information."],
+      ["1", "Save your WOZ value as a PDF",
+            'Go to <a href="https://www.wozwaardeloket.nl" target="_blank" rel="noopener">wozwaardeloket.nl</a>, look up your address and save the page as a PDF (in your browser: Print → Save as PDF). Banks accept this as official proof.'],
+      ["2", "Contact your bank",
+            "Some banks have a dedicated option in their app — look for something like 'rate review' or 'update property value'. Can't find it quickly? No worries. Just send a message via the chat in the app or give them a call. Tell them your property value has gone up and you'd like to request a rate review."],
       ["3", "Submit a review request",
-            "Tell them your LTV has dropped and ask for a rate review. Attach the WOZ value as proof. A simple email or message via the app is enough."],
-      ["4", "No refinancing, no fees",
-            "You're not taking out a new mortgage. Banks are legally required to adjust your rate when you drop into a lower bracket — even during a fixed-rate period. Typically takes 4–8 weeks."],
+            "Attach the WOZ PDF and ask for a rate review based on your improved LTV. Whether and when your bank will apply it depends on the terms in your mortgage contract — some banks allow changes during the fixed-rate period, others only at renewal. Ask your bank explicitly."],
+      ["4", "No refinancing, no notary costs",
+            "You're not taking out a new mortgage. If the bank agrees, it's an adjustment to your existing rate. Keep in mind mortgages can be complex — the outcome varies by bank, product and contract."],
     ],
     banner_good: (o, n, v, w) => `Your LTV has dropped from <strong>${o}%</strong> to <strong>${n}%</strong> — that's good news. Based on a ${w} of €${v}, there's a good chance you now qualify for a lower rate. Whether that's the case depends on the exact thresholds your bank uses.`,
     banner_same: (o, n) => `Your LTV dropped from <strong>${o}%</strong> to <strong>${n}%</strong>. Whether that's enough for a lower rate depends on your bank's exact thresholds — it's worth asking.`,
@@ -585,6 +609,7 @@ const T = {
     footer_legal:   "Indicative tool, not mortgage advice. Rate benefit only applies to mortgages without NHG. · <a href=\"https://www.wozwaardeloket.nl\" target=\"_blank\" rel=\"noopener\">WOZ Waardeloket</a>",
     which_woz:  "WOZ value",
     which_bank: "bank valuation",
+    print_btn:  "🖨 Save as PDF / Print",
   }
 };
 
@@ -790,762 +815,7 @@ function calculate() {
   setTimeout(() => {
     resultsEl.classList.add('visible');
     resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }, 10);
-}
-
-// ── Init ──────────────────────────────────────────────────────
-renderText();
-addPart(); // start with one mortgage part
-</script>
-</body>
-</html>  color: var(--text);
-  min-height: 100vh;
-  padding: 0 1rem 5rem;
-  line-height: 1.5;
-}
-
-/* ── Layout ──────────────────────────────────────────────────── */
-.wrap { max-width: 580px; margin: 0 auto; }
-
-/* ── Lang toggle ─────────────────────────────────────────────── */
-.topbar {
-  display: flex;
-  justify-content: flex-end;
-  padding: 1.25rem 0 0;
-  margin-bottom: 0.25rem;
-}
-.lang-toggle { display: flex; gap: 3px; }
-.lang-btn {
-  font-family: var(--font);
-  font-size: 0.73rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  padding: 4px 11px;
-  border-radius: 20px;
-  border: 1px solid var(--border);
-  background: transparent;
-  color: var(--muted);
-  cursor: pointer;
-  transition: all 0.15s;
-}
-.lang-btn.active { background: var(--text); color: #fff; border-color: var(--text); }
-
-/* ── Header ──────────────────────────────────────────────────── */
-header { padding: 1.75rem 0 2rem; border-bottom: 1px solid var(--border); margin-bottom: 2rem; }
-.eyebrow {
-  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em;
-  text-transform: uppercase; color: var(--accent); margin-bottom: 0.6rem;
-}
-h1 {
-  font-family: var(--font-serif);
-  font-size: clamp(1.8rem, 5vw, 2.5rem);
-  line-height: 1.15; letter-spacing: -0.01em;
-  color: var(--text); margin-bottom: 0.9rem; font-weight: normal;
-}
-.intro-text { font-size: 0.97rem; color: var(--muted); line-height: 1.7; max-width: 500px; }
-
-/* Privacy badge */
-.privacy-badge {
-  display: inline-flex; align-items: center; gap: 0.4rem;
-  margin-top: 1.1rem;
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 8px; padding: 0.5rem 0.85rem;
-  font-size: 0.78rem; color: var(--muted); line-height: 1.4;
-}
-.privacy-badge .lock { font-size: 0.9rem; }
-
-/* ── Card ────────────────────────────────────────────────────── */
-.card {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 1.6rem;
-  box-shadow: var(--shadow); margin-bottom: 1rem;
-}
-.card-title {
-  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em;
-  text-transform: uppercase; color: var(--muted); margin-bottom: 1.1rem;
-}
-
-/* ── Step 0: NHG ─────────────────────────────────────────────── */
-.nhg-question { font-size: 0.96rem; font-weight: 600; color: var(--text); margin-bottom: 0.9rem; line-height: 1.4; }
-.nhg-sub { font-size: 0.82rem; color: var(--muted); margin-bottom: 1.1rem; line-height: 1.55; }
-.nhg-btns { display: flex; gap: 0.6rem; }
-.nhg-btn {
-  flex: 1; font-family: var(--font); font-size: 0.9rem; font-weight: 600;
-  padding: 0.65rem 1rem; border-radius: 9px; border: 1.5px solid var(--border);
-  background: var(--bg); color: var(--text); cursor: pointer; transition: all 0.15s;
-}
-.nhg-btn:hover { border-color: var(--accent); color: var(--accent); }
-.nhg-btn.selected-yes { background: var(--warn-bg); border-color: var(--warn-bd); color: var(--warn); }
-.nhg-btn.selected-no  { background: var(--accent-lt); border-color: var(--accent); color: var(--accent-dk); }
-
-.nhg-result {
-  display: none; margin-top: 1rem; padding: 1rem 1.1rem;
-  border-radius: 10px; font-size: 0.88rem; line-height: 1.6;
-}
-.nhg-result.nhg-yes { background: var(--warn-bg); border: 1px solid var(--warn-bd); color: var(--warn); }
-.nhg-result.nhg-no  { background: var(--accent-lt); border: 1px solid #b6d9c4; color: var(--accent-dk); }
-
-/* ── WOZ box ─────────────────────────────────────────────────── */
-.woz-box {
-  background: var(--accent-lt); border: 1px solid #c5dece;
-  border-radius: var(--radius); padding: 1.1rem 1.25rem;
-  margin-bottom: 1rem; font-size: 0.87rem; color: var(--accent-dk); line-height: 1.65;
-}
-.woz-box strong { display: block; margin-bottom: 0.25rem; font-size: 0.9rem; }
-.woz-box a { color: var(--accent); font-weight: 700; }
-
-/* ── Form fields ─────────────────────────────────────────────── */
-.field { margin-bottom: 1.1rem; }
-.field:last-of-type { margin-bottom: 0; }
-label {
-  display: block; font-size: 0.81rem; font-weight: 600;
-  color: var(--text); margin-bottom: 0.35rem;
-}
-label .hint { font-weight: 400; color: var(--muted); margin-left: 0.35rem; font-size: 0.76rem; }
-.input-wrap { position: relative; }
-.prefix, .suffix {
-  position: absolute; top: 50%; transform: translateY(-50%);
-  color: var(--muted); font-size: 0.9rem; pointer-events: none;
-}
-.prefix { left: 11px; }
-.suffix { right: 11px; font-size: 0.78rem; }
-
-input[type="number"] {
-  width: 100%; font-family: var(--font); font-size: 0.97rem; font-weight: 500;
-  padding: 0.65rem 2.5rem 0.65rem 1.85rem;
-  border: 1.5px solid var(--border); border-radius: 9px;
-  background: var(--bg); color: var(--text); outline: none;
-  transition: border-color 0.15s, box-shadow 0.15s;
-  -moz-appearance: textfield;
-}
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
-input[type="number"]:focus {
-  border-color: var(--accent); background: #fff;
-  box-shadow: 0 0 0 3px rgba(42,96,65,0.1);
-}
-
-.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; }
-@media (max-width: 440px) { .two-col { grid-template-columns: 1fr; } }
-
-/* ── Mortgage parts ──────────────────────────────────────────── */
-.part-row {
-  display: grid; grid-template-columns: auto 1fr auto;
-  align-items: center; gap: 0.75rem;
-  padding: 0.75rem 0; border-bottom: 1px solid var(--border);
-}
-.part-row:last-of-type { border-bottom: none; padding-bottom: 0; }
-.part-label { font-size: 0.78rem; font-weight: 600; color: var(--muted); white-space: nowrap; }
-.remove-btn {
-  background: none; border: none; cursor: pointer; color: var(--muted);
-  font-size: 1.1rem; line-height: 1; padding: 2px 4px; border-radius: 4px;
-  transition: color 0.15s;
-}
-.remove-btn:hover { color: var(--red); }
-
-.add-part-btn {
-  display: flex; align-items: center; gap: 0.4rem;
-  margin-top: 0.85rem; font-family: var(--font); font-size: 0.83rem; font-weight: 600;
-  color: var(--accent); background: none; border: 1.5px dashed #b6d9c4;
-  border-radius: 8px; padding: 0.5rem 0.9rem; cursor: pointer;
-  transition: all 0.15s; width: 100%;
-}
-.add-part-btn:hover { background: var(--accent-lt); border-color: var(--accent); }
-
-.debt-total {
-  margin-top: 0.75rem; padding: 0.65rem 0.9rem;
-  background: var(--bg); border-radius: 8px;
-  font-size: 0.84rem; color: var(--muted);
-  display: flex; justify-content: space-between; align-items: center;
-}
-.debt-total strong { color: var(--text); font-size: 0.95rem; }
-
-/* ── Button ──────────────────────────────────────────────────── */
-.btn-primary {
-  width: 100%; font-family: var(--font); font-size: 0.97rem; font-weight: 700;
-  padding: 0.875rem 1.5rem; background: var(--accent); color: #fff;
-  border: none; border-radius: 10px; cursor: pointer;
-  transition: background 0.15s, transform 0.1s;
-  letter-spacing: -0.01em; margin-top: 0.25rem;
-}
-.btn-primary:hover { background: var(--accent-dk); }
-.btn-primary:active { transform: scale(0.99); }
-
-/* ── Results ─────────────────────────────────────────────────── */
-#results { display: none; }
-#results.visible { display: block; animation: fadeUp 0.3s ease; }
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-.result-banner {
-  border-radius: var(--radius); padding: 1.1rem 1.25rem;
-  font-size: 0.92rem; line-height: 1.6; margin-bottom: 1rem; font-weight: 500;
-}
-.banner-good { background: #f0faf4; border: 1px solid #86efac; color: #14532d; }
-.banner-same { background: var(--warn-bg); border: 1px solid var(--warn-bd); color: var(--warn); }
-.banner-none { background: var(--red-bg); border: 1px solid #fca5a5; color: var(--red); }
-
-.ltv-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; margin-bottom: 0.85rem; }
-.ltv-block {
-  text-align: center; padding: 1.2rem 0.75rem;
-  background: var(--bg); border-radius: 10px;
-}
-.ltv-block .lbl {
-  font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.08em;
-  color: var(--muted); margin-bottom: 0.35rem; font-weight: 700;
-}
-.ltv-block .num {
-  font-family: var(--font-serif); font-size: 2.3rem;
-  line-height: 1; letter-spacing: -0.01em;
-}
-.ltv-block .sub { font-size: 0.75rem; color: var(--muted); margin-top: 0.35rem; }
-.num.good    { color: #16a34a; }
-.num.neutral { color: #d97706; }
-.num.bad     { color: var(--red); }
-
-.section-label {
-  font-size: 0.68rem; font-weight: 700; text-transform: uppercase;
-  letter-spacing: 0.09em; color: var(--muted); margin: 1.4rem 0 0.55rem;
-}
-
-table { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
-th {
-  text-align: left; font-size: 0.67rem; text-transform: uppercase;
-  letter-spacing: 0.07em; color: var(--muted); font-weight: 700;
-  padding: 0 0.7rem 0.45rem; border-bottom: 1px solid var(--border);
-}
-td { padding: 0.52rem 0.7rem; border-bottom: 1px solid #f0ece4; color: var(--muted); }
-tr.you td { background: var(--accent-lt); color: var(--accent-dk); font-weight: 600; }
-tr.you td:first-child { border-left: 3px solid var(--accent); }
-td.marker { color: var(--accent); font-size: 0.75rem; font-weight: 700; }
-
-/* Savings */
-.savings-grid {
-  display: grid; grid-template-columns: repeat(3,1fr); gap: 0.65rem; margin-top: 0.5rem;
-}
-@media(max-width:380px){ .savings-grid{ grid-template-columns:1fr 1fr; } }
-.savings-cell {
-  background: var(--accent-lt); border: 1px solid #c5dece;
-  border-radius: 10px; padding: 0.9rem 0.6rem; text-align: center;
-}
-.savings-cell .val {
-  font-family: var(--font-serif); font-size: 1.45rem; color: var(--accent); line-height: 1;
-}
-.savings-cell .lbl {
-  font-size: 0.67rem; color: #4a7c5c; margin-top: 4px;
-  text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700;
-}
-.savings-note { font-size: 0.72rem; color: var(--muted); margin-top: 0.55rem; line-height: 1.5; }
-
-/* Steps */
-.step {
-  display: flex; gap: 0.9rem; padding: 0.9rem 0;
-  border-bottom: 1px solid var(--border); align-items: flex-start;
-}
-.step:last-child { border-bottom: none; padding-bottom: 0; }
-.step-num {
-  flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%;
-  background: var(--accent-lt); color: var(--accent);
-  font-size: 0.75rem; font-weight: 700;
-  display: flex; align-items: center; justify-content: center; margin-top: 1px;
-}
-.step-title { font-size: 0.9rem; font-weight: 600; color: var(--text); margin-bottom: 2px; }
-.step-body  { font-size: 0.83rem; color: var(--muted); line-height: 1.6; }
-.step-body a { color: var(--accent); font-weight: 600; }
-
-.tip-card {
-  background: var(--warn-bg); border: 1px solid var(--warn-bd);
-  border-radius: var(--radius); padding: 1.1rem 1.25rem;
-  font-size: 0.87rem; color: var(--warn); line-height: 1.65;
-}
-.tip-card a { color: var(--warn); font-weight: 700; }
-
-/* ── Footer ──────────────────────────────────────────────────── */
-footer {
-  margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border);
-  font-size: 0.76rem; color: var(--muted); line-height: 1.65;
-}
-footer a { color: var(--accent); }
-.footer-privacy {
-  display: flex; align-items: flex-start; gap: 0.5rem;
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 0.85rem;
-  font-size: 0.78rem; color: var(--muted); line-height: 1.55;
-}
-</style>
-</head>
-<body>
-<div class="wrap">
-
-  <div class="topbar">
-    <div class="lang-toggle">
-      <button class="lang-btn active" onclick="setLang('nl')" id="btn-nl">NL</button>
-      <button class="lang-btn" onclick="setLang('en')" id="btn-en">EN</button>
-    </div>
-  </div>
-
-  <!-- Header -->
-  <header>
-    <div class="eyebrow" data-t="eyebrow"></div>
-    <h1 data-t="title"></h1>
-    <p class="intro-text" data-t="intro"></p>
-    <div class="privacy-badge">
-      <span class="lock">🔒</span>
-      <span data-t="privacy_badge"></span>
-    </div>
-  </header>
-
-  <!-- Step 0: NHG check -->
-  <div class="card" id="nhg-card">
-    <div class="card-title" data-t="step0_label"></div>
-    <div class="nhg-question" data-t="nhg_question"></div>
-    <div class="nhg-sub" data-t="nhg_sub"></div>
-    <div class="nhg-btns">
-      <button class="nhg-btn" id="nhg-yes" onclick="setNHG(true)" data-t="nhg_yes"></button>
-      <button class="nhg-btn" id="nhg-no"  onclick="setNHG(false)" data-t="nhg_no"></button>
-    </div>
-    <div class="nhg-result nhg-yes" id="nhg-result-yes" data-t="nhg_result_yes"></div>
-    <div class="nhg-result nhg-no"  id="nhg-result-no"  data-t="nhg_result_no"></div>
-  </div>
-
-  <!-- Main form (hidden until NHG answered No) -->
-  <div id="main-form" style="display:none">
-
-    <!-- WOZ explainer -->
-    <div class="woz-box">
-      <strong data-t="woz_title"></strong>
-      <span data-t="woz_body"></span>
-    </div>
-
-    <!-- Property values -->
-    <div class="card">
-      <div class="card-title" data-t="form_title"></div>
-
-      <div class="two-col">
-        <div class="field">
-          <label for="woz"><span data-t="woz_label"></span><span class="hint" data-t="woz_hint"></span></label>
-          <div class="input-wrap">
-            <span class="prefix">€</span>
-            <input type="number" id="woz" value="350000" min="50000" max="5000000" step="1000">
-          </div>
-        </div>
-        <div class="field">
-          <label for="bank"><span data-t="bank_label"></span><span class="hint" data-t="bank_hint"></span></label>
-          <div class="input-wrap">
-            <span class="prefix">€</span>
-            <input type="number" id="bank" value="300000" min="50000" max="5000000" step="1000">
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Mortgage parts -->
-    <div class="card">
-      <div class="card-title" data-t="debt_title"></div>
-      <div id="parts-list"></div>
-      <button class="add-part-btn" id="add-btn" onclick="addPart()">
-        <span>＋</span> <span data-t="add_part"></span>
-      </button>
-      <div class="debt-total">
-        <span data-t="total_label"></span>
-        <strong id="debt-total-val">€ 0</strong>
-      </div>
-    </div>
-
-    <button class="btn-primary" onclick="calculate()" data-t="btn"></button>
-  </div>
-
-  <!-- Results -->
-  <div id="results">
-    <div id="banner" class="result-banner"></div>
-
-    <div class="card">
-      <div class="ltv-row">
-        <div class="ltv-block">
-          <div class="lbl" data-t="then"></div>
-          <div class="num" id="ltv-old"></div>
-          <div class="sub" id="tier-old"></div>
-        </div>
-        <div class="ltv-block">
-          <div class="lbl" data-t="now"></div>
-          <div class="num" id="ltv-new"></div>
-          <div class="sub" id="tier-new"></div>
-        </div>
-      </div>
-      <div class="section-label" data-t="table_title"></div>
-      <table>
-        <thead><tr>
-          <th data-t="col_ltv"></th>
-          <th data-t="col_meaning"></th>
-          <th></th>
-        </tr></thead>
-        <tbody id="tier-tbody"></tbody>
-      </table>
-    </div>
-
-    <div class="card" id="savings-card" style="display:none">
-      <div class="card-title" data-t="savings_title"></div>
-      <div class="savings-grid">
-        <div class="savings-cell"><div class="val" id="s-rate"></div><div class="lbl" data-t="s_rate_lbl"></div></div>
-        <div class="savings-cell"><div class="val" id="s-month"></div><div class="lbl" data-t="s_month_lbl"></div></div>
-        <div class="savings-cell"><div class="val" id="s-year"></div><div class="lbl" data-t="s_year_lbl"></div></div>
-      </div>
-      <div class="savings-note" data-t="savings_note"></div>
-    </div>
-
-    <div class="card" id="steps-card" style="display:none">
-      <div class="card-title" data-t="steps_title"></div>
-      <div id="steps-list"></div>
-    </div>
-
-    <div class="tip-card" id="tip-card" style="display:none" data-t="tip"></div>
-  </div>
-
-  <!-- Footer -->
-  <footer>
-    <div class="footer-privacy">
-      <span>🔒</span>
-      <span data-t="footer_privacy"></span>
-    </div>
-    <span data-t="footer_legal"></span>
-  </footer>
-
-</div>
-<script>
-// ── Translations ──────────────────────────────────────────────
-const T = {
-  nl: {
-    eyebrow:        "Hypotheekrente check",
-    title:          "Betaal jij te veel hypotheekrente?",
-    intro:          "Als je woning meer waard is geworden, heeft je bank de mogelijkheid om je rente te verlagen. Veel mensen weten dit niet. Vul hieronder je gegevens in — het duurt minder dan een minuut.",
-    privacy_badge:  "Alles wordt berekend in je eigen browser. We slaan niets op en we vragen je adres niet.",
-    step0_label:    "Stap 1 van 3 — Check eerst dit",
-    nhg_question:   "Is je hypotheek afgesloten met NHG (Nationale Hypotheek Garantie)?",
-    nhg_sub:        "Dit staat in je hypotheekpapieren of je kunt het navragen bij je bank. Bij NHG betaal je al het laagste tarief — dan heeft deze check geen zin.",
-    nhg_yes:        "Ja, ik heb NHG",
-    nhg_no:         "Nee, geen NHG",
-    nhg_result_yes: "Dan is deze check helaas niet voor jou. Bij een NHG-hypotheek betaal je al het laagste gegarandeerde tarief, ongeacht de woningwaarde. Goed nieuws dus — je zit al goed! 👍",
-    nhg_result_no:  "Top — dan kunnen we verder. Vul hieronder je gegevens in.",
-    woz_title:      "Stap 2 — Zoek je WOZ-waarde op",
-    woz_body:       'Ga naar <a href="https://www.wozwaardeloket.nl" target="_blank" rel="noopener">wozwaardeloket.nl</a>, typ je adres in en noteer het getal. Geen account nodig, gratis, duurt 30 seconden. We vragen alleen de waarde — niet je adres.',
-    form_title:     "Stap 3 — Vul je gegevens in",
-    woz_label:      "WOZ-waarde",
-    woz_hint:       "van wozwaardeloket.nl",
-    bank_label:     "Waarde die je bank gebruikte",
-    bank_hint:      "uit je hypotheekofferte",
-    debt_title:     "Hoeveel hypotheek heb je nog?",
-    add_part:       "Hypotheekdeel toevoegen",
-    part_label:     "Deel",
-    total_label:    "Totale hypotheekschuld",
-    btn:            "Bereken of ik in aanmerking kom →",
-    then:           "Toen",
-    now:            "Nu",
-    table_title:    "Hoe werken de klassen?",
-    col_ltv:        "Schuld vs. woningwaarde",
-    col_meaning:    "Wat dat betekent",
-    col_you:        "← jij",
-    tiers: [
-      ["≤ 60%",  "Laagste rente mogelijk"],
-      ["≤ 70%",  "Zeer lage rente"],
-      ["≤ 80%",  "Lage rente"],
-      ["≤ 90%",  "Gemiddelde rente"],
-      ["≤ 100%", "Hogere rente"],
-      ["≤ 106%", "Hoogste rente"],
-    ],
-    savings_title:  "Wat kan dit je opleveren?",
-    s_rate_lbl:     "Renteverlaging",
-    s_month_lbl:    "Per maand minder",
-    s_year_lbl:     "Per jaar minder",
-    savings_note:   "Indicatieve berekening op basis van ~0,25% verlaging per klasse. Het werkelijke bedrag hangt af van je bank en hypotheekvorm.",
-    steps_title:    "Wat kun je nu doen?",
-    steps: [
-      ["1", "Download de WOZ-waarde",
-            'Ga naar <a href="https://www.wozwaardeloket.nl" target="_blank" rel="noopener">wozwaardeloket.nl</a> en maak een screenshot. Je hebt hem nodig als bewijs voor je bank.'],
-      ["2", "Stuur je bank een berichtje",
-            "Zeg dat je een herbeoordeling van je rentetarief wilt op basis van de gestegen woningwaarde. Stuur de WOZ-waarde mee. Een gewone e-mail of berichtje via de app is genoeg — geen adviseur nodig."],
-      ["3", "De bank past je rente aan",
-            "Banken zijn wettelijk verplicht dit te doen als je in een lagere klasse valt — ook midden in een rentevaste periode. Duurt gemiddeld 4 tot 8 weken."],
-      ["4", "Geen gedoe, geen kosten",
-            "Je sluit geen nieuwe hypotheek af. Geen notariskosten, geen oversluitboete. Gewoon een aanpassing van je bestaande tarief."],
-    ],
-    banner_good: (o, n, v, w) => `Goed nieuws — je valt in een betere categorie! Je schuld is nu <strong>${n}%</strong> van de woningwaarde (was ${o}%). Op basis van de ${w} van €${v} heb je waarschijnlijk recht op een lagere rente.`,
-    banner_same: (o, n) => `Je verhouding daalde van ${o}% naar ${n}% — maar je valt nog net in dezelfde categorie. Controleer volgend jaar opnieuw.`,
-    banner_none: (n) => `Op dit moment val je in dezelfde categorie (${n}%). Is je woning de afgelopen jaren in waarde gestegen? Controleer de WOZ-waarde op wozwaardeloket.nl.`,
-    tip:         'Woningen zijn de afgelopen jaren flink in waarde gestegen. Controleer elk jaar je WOZ-waarde op <a href="https://www.wozwaardeloket.nl" target="_blank" rel="noopener">wozwaardeloket.nl</a> — gratis en klaar in 30 seconden.',
-    footer_privacy: "Deze pagina slaat geen gegevens op. Alle berekeningen gebeuren lokaal in je browser. We gebruiken geen cookies, geen analytics en geen trackers. We vragen je adres niet — alleen de WOZ-waarde.",
-    footer_legal:   "Indicatieve tool, geen hypotheekadvies. Tariefvoordeel geldt alleen bij hypotheken zonder NHG. · <a href=\"https://www.wozwaardeloket.nl\" target=\"_blank\" rel=\"noopener\">WOZ Waardeloket</a>",
-    which_woz:  "WOZ-waarde",
-    which_bank: "bankwaarde",
-  },
-  en: {
-    eyebrow:        "Mortgage rate check",
-    title:          "Are you overpaying on your mortgage?",
-    intro:          "If your home has gone up in value, your bank can lower your interest rate. Most people don't know this. Fill in the details below — it takes less than a minute.",
-    privacy_badge:  "Everything is calculated in your own browser. We store nothing and we don't ask for your address.",
-    step0_label:    "Step 1 of 3 — Check this first",
-    nhg_question:   "Was your mortgage taken out with NHG (Nationale Hypotheek Garantie)?",
-    nhg_sub:        "This is in your mortgage paperwork, or you can ask your bank. With NHG you already pay the lowest rate — so this check doesn't apply to you.",
-    nhg_yes:        "Yes, I have NHG",
-    nhg_no:         "No, no NHG",
-    nhg_result_yes: "Then unfortunately this check isn't for you. With an NHG mortgage you already pay the lowest guaranteed rate, regardless of your home's value. Good news — you're already in the best position! 👍",
-    nhg_result_no:  "Great — let's continue. Fill in your details below.",
-    woz_title:      "Step 2 — Look up your WOZ value",
-    woz_body:       'Go to <a href="https://www.wozwaardeloket.nl" target="_blank" rel="noopener">wozwaardeloket.nl</a>, type in your address and note the number. No account needed, free, takes 30 seconds. We only need the value — not your address.',
-    form_title:     "Step 3 — Enter your details",
-    woz_label:      "WOZ value",
-    woz_hint:       "from wozwaardeloket.nl",
-    bank_label:     "Value your bank used",
-    bank_hint:      "from your mortgage offer",
-    debt_title:     "How much mortgage do you still have?",
-    add_part:       "Add mortgage part",
-    part_label:     "Part",
-    total_label:    "Total mortgage balance",
-    btn:            "Check if I qualify →",
-    then:           "Back then",
-    now:            "Right now",
-    table_title:    "How do the brackets work?",
-    col_ltv:        "Debt vs. home value",
-    col_meaning:    "What that means",
-    col_you:        "← you",
-    tiers: [
-      ["≤ 60%",  "Lowest rate possible"],
-      ["≤ 70%",  "Very low rate"],
-      ["≤ 80%",  "Low rate"],
-      ["≤ 90%",  "Average rate"],
-      ["≤ 100%", "Higher rate"],
-      ["≤ 106%", "Highest rate"],
-    ],
-    savings_title:  "What could this save you?",
-    s_rate_lbl:     "Rate reduction",
-    s_month_lbl:    "Less per month",
-    s_year_lbl:     "Less per year",
-    savings_note:   "Indicative estimate based on ~0.25% rate reduction per bracket. Actual savings depend on your lender and mortgage type.",
-    steps_title:    "What can you do now?",
-    steps: [
-      ["1", "Save the WOZ value",
-            'Go to <a href="https://www.wozwaardeloket.nl" target="_blank" rel="noopener">wozwaardeloket.nl</a> and take a screenshot. You\'ll need it as proof for your bank.'],
-      ["2", "Send your bank a quick message",
-            "Tell them you'd like a rate review based on the increased property value, and attach the WOZ value as proof. A simple email or message via the app is enough — no advisor needed."],
-      ["3", "Your bank adjusts your rate",
-            "Dutch banks are legally required to do this when you move to a lower bracket — even during a fixed-rate period. It typically takes 4 to 8 weeks."],
-      ["4", "No hassle, no costs",
-            "You're not taking out a new mortgage. No notary fees, no penalties. It's simply an adjustment to your existing rate."],
-    ],
-    banner_good: (o, n, v, w) => `Good news — you've moved to a better bracket! Your debt is now <strong>${n}%</strong> of your home's value (was ${o}%). Based on a ${w} of €${v}, you likely qualify for a lower rate.`,
-    banner_same: (o, n) => `Your ratio dropped from ${o}% to ${n}% — but you're still just within the same bracket. Check again next year.`,
-    banner_none: (n) => `You're currently in the same bracket (${n}%). Has your home gone up in value recently? Check the WOZ value at wozwaardeloket.nl.`,
-    tip:         'Home values in the Netherlands have risen a lot in recent years. Check your WOZ value every year at <a href="https://www.wozwaardeloket.nl" target="_blank" rel="noopener">wozwaardeloket.nl</a> — free and done in 30 seconds.',
-    footer_privacy: "This page stores no data. All calculations happen locally in your browser. No cookies, no analytics, no trackers. We don't ask for your address — only the WOZ value.",
-    footer_legal:   "Indicative tool, not mortgage advice. Rate benefit only applies to mortgages without NHG. · <a href=\"https://www.wozwaardeloket.nl\" target=\"_blank\" rel=\"noopener\">WOZ Waardeloket</a>",
-    which_woz:  "WOZ value",
-    which_bank: "bank valuation",
-  }
-};
-
-const THRESHOLDS = [60, 70, 80, 90, 100, 106];
-let lang = 'nl';
-let partCount = 0;
-
-// ── Helpers ───────────────────────────────────────────────────
-function fmt(n)    { return Math.round(n).toLocaleString('nl-NL'); }
-function fmtE(n)   { return '€\u202f' + fmt(n); }
-function getTier(ltv) {
-  for (let i = 0; i < THRESHOLDS.length; i++) if (ltv <= THRESHOLDS[i]) return i;
-  return THRESHOLDS.length - 1;
-}
-function colorClass(ltv) {
-  return ltv <= 70 ? 'good' : ltv <= 90 ? 'neutral' : 'bad';
-}
-
-// ── Language ──────────────────────────────────────────────────
-function setLang(l) {
-  lang = l;
-  document.getElementById('btn-nl').classList.toggle('active', l === 'nl');
-  document.getElementById('btn-en').classList.toggle('active', l === 'en');
-  document.documentElement.lang = l;
-  renderText();
-  updatePartLabels();
-  updateTotal();
-  document.getElementById('results').classList.remove('visible');
-  document.getElementById('results').style.display = 'none';
-}
-
-function renderText() {
-  const t = T[lang];
-  document.querySelectorAll('[data-t]').forEach(el => {
-    const key = el.getAttribute('data-t');
-    if (t[key] !== undefined) el.innerHTML = t[key];
-  });
-}
-
-// ── NHG ───────────────────────────────────────────────────────
-function setNHG(hasNHG) {
-  const t = T[lang];
-  document.getElementById('nhg-yes').className = 'nhg-btn' + (hasNHG  ? ' selected-yes' : '');
-  document.getElementById('nhg-no').className  = 'nhg-btn' + (!hasNHG ? ' selected-no'  : '');
-  document.getElementById('nhg-result-yes').style.display = hasNHG  ? 'block' : 'none';
-  document.getElementById('nhg-result-no').style.display  = !hasNHG ? 'block' : 'none';
-  document.getElementById('main-form').style.display      = !hasNHG ? 'block' : 'none';
-  // hide results if switching
-  document.getElementById('results').classList.remove('visible');
-  document.getElementById('results').style.display = 'none';
-}
-
-// ── Mortgage parts ────────────────────────────────────────────
-function addPart() {
-  if (partCount >= 5) return;
-  partCount++;
-  const t    = T[lang];
-  const list = document.getElementById('parts-list');
-  const row  = document.createElement('div');
-  row.className = 'part-row';
-  row.id = 'part-' + partCount;
-  row.innerHTML = `
-    <span class="part-label">${t.part_label} ${partCount}</span>
-    <div class="input-wrap">
-      <span class="prefix">€</span>
-      <input type="number" id="debt-${partCount}" value="0" min="0" max="5000000" step="1000"
-             oninput="updateTotal()" onchange="updateTotal()">
-    </div>
-    <button class="remove-btn" onclick="removePart(${partCount})" title="Verwijder">✕</button>`;
-  list.appendChild(row);
-
-  if (partCount === 1) {
-    document.getElementById('debt-1').value = 220000;
-    updateTotal();
-  }
-
-  document.getElementById('add-btn').style.display = partCount >= 5 ? 'none' : 'flex';
-  updateTotal();
-}
-
-function removePart(id) {
-  const el = document.getElementById('part-' + id);
-  if (el) el.remove();
-  updateTotal();
-  // re-enable add button
-  document.getElementById('add-btn').style.display = 'flex';
-  partCount = document.querySelectorAll('.part-row').length;
-  // re-label
-  updatePartLabels();
-}
-
-function updatePartLabels() {
-  const t = T[lang];
-  document.querySelectorAll('.part-row').forEach((row, i) => {
-    const lbl = row.querySelector('.part-label');
-    if (lbl) lbl.textContent = t.part_label + ' ' + (i + 1);
-  });
-}
-
-function getTotalDebt() {
-  let total = 0;
-  document.querySelectorAll('.part-row input[type="number"]').forEach(inp => {
-    total += parseFloat(inp.value) || 0;
-  });
-  return total;
-}
-
-function updateTotal() {
-  document.getElementById('debt-total-val').textContent = fmtE(getTotalDebt());
-}
-
-// ── Calculate ─────────────────────────────────────────────────
-function calculate() {
-  const t    = T[lang];
-  const woz  = parseFloat(document.getElementById('woz').value)  || 0;
-  const bank = parseFloat(document.getElementById('bank').value) || 0;
-  const debt = getTotalDebt();
-
-  if (!woz || !bank || !debt) {
-    alert(lang === 'nl' ? 'Vul alle velden in.' : 'Please fill in all fields.');
-    return;
-  }
-
-  const best  = Math.max(woz, bank);
-  const which = woz >= bank ? t.which_woz : t.which_bank;
-
-  const ltvOld = (debt / bank) * 100;
-  const ltvNew = (debt / best) * 100;
-
-  const oldIdx = getTier(ltvOld);
-  const newIdx = getTier(ltvNew);
-  const improved = newIdx < oldIdx;
-
-  // Banner
-  const banner = document.getElementById('banner');
-  let html, cls;
-  if (improved) {
-    html = t.banner_good(ltvOld.toFixed(1), ltvNew.toFixed(1), fmt(best), which);
-    cls  = 'banner-good';
-  } else if (ltvNew < ltvOld) {
-    html = t.banner_same(ltvOld.toFixed(1), ltvNew.toFixed(1));
-    cls  = 'banner-same';
-  } else {
-    html = t.banner_none(ltvNew.toFixed(1));
-    cls  = 'banner-none';
-  }
-  banner.innerHTML = html;
-  banner.className = 'result-banner ' + cls;
-
-  // LTV numbers
-  const no = document.getElementById('ltv-old');
-  no.textContent = ltvOld.toFixed(1) + '%';
-  no.className   = 'num ' + colorClass(ltvOld);
-  document.getElementById('tier-old').textContent = t.tiers[oldIdx][1];
-
-  const nn = document.getElementById('ltv-new');
-  nn.textContent = ltvNew.toFixed(1) + '%';
-  nn.className   = 'num ' + colorClass(ltvNew);
-  document.getElementById('tier-new').textContent = t.tiers[newIdx][1];
-
-  // Tier table
-  const tbody = document.getElementById('tier-tbody');
-  tbody.innerHTML = '';
-  t.tiers.forEach(([range, meaning], i) => {
-    const tr = document.createElement('tr');
-    if (i === newIdx) tr.className = 'you';
-    tr.innerHTML = `<td>${range}</td><td>${meaning}</td><td class="marker">${i === newIdx ? t.col_you : ''}</td>`;
-    tbody.appendChild(tr);
-  });
-
-  // Savings & steps
-  const savingsCard = document.getElementById('savings-card');
-  const stepsCard   = document.getElementById('steps-card');
-  const tipCard     = document.getElementById('tip-card');
-
-  if (improved) {
-    const reduction = (oldIdx - newIdx) * 0.25;
-    const monthly   = (debt * reduction / 100) / 12;
-    const yearly    = monthly * 12;
-    document.getElementById('s-rate').textContent  = '~' + reduction.toFixed(2) + '%';
-    document.getElementById('s-month').textContent = fmtE(monthly);
-    document.getElementById('s-year').textContent  = fmtE(yearly);
-    savingsCard.style.display = 'block';
-
-    const stepsList = document.getElementById('steps-list');
-    stepsList.innerHTML = '';
-    t.steps.forEach(([num, title, body]) => {
-      const d = document.createElement('div');
-      d.className = 'step';
-      d.innerHTML = `<div class="step-num">${num}</div><div><div class="step-title">${title}</div><div class="step-body">${body}</div></div>`;
-      stepsList.appendChild(d);
-    });
-    stepsCard.style.display = 'block';
-    tipCard.style.display   = 'none';
-  } else {
-    savingsCard.style.display = 'none';
-    stepsCard.style.display   = 'none';
-    tipCard.style.display     = 'block';
-  }
-
-  const resultsEl = document.getElementById('results');
-  resultsEl.style.display = 'block';
-  setTimeout(() => {
-    resultsEl.classList.add('visible');
-    resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.querySelector('.btn-print').classList.add('visible');
   }, 10);
 }
 
