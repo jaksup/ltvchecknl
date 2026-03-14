@@ -515,17 +515,12 @@ footer a { color: var(--accent); }
       <span>🔒</span>
       <span data-t="footer_privacy"></span>
     </div>
-    <div class="footer-row">
+    <div class="footer-row" style="margin-top:0.5rem; font-size:0.74rem; color:var(--muted);">
       <span data-t="footer_legal"></span>
-    </div>
-    <div class="footer-row footer-contact">
-      <span data-t="footer_contact_label"></span>
-      <a href="#" class="email-link" id="email-link" onclick="revealEmail(event)">
-        <span data-t="footer_contact_show"></span>
-      </a>
-    </div>
-    <div class="footer-row" style="margin-top:0.75rem; padding-top:0.75rem; border-top:1px solid var(--border);">
-      <a href="persbericht.html" style="color:var(--muted); font-size:0.74rem;" data-t="press_link"></a>
+      &nbsp;·&nbsp;
+      <a href="#" class="email-link" id="email-link" onclick="revealEmail(event)" style="color:var(--muted);"><span data-t="footer_contact_show"></span></a>
+      &nbsp;·&nbsp;
+      <a href="persbericht.html" style="color:var(--muted);" data-t="press_link"></a>
     </div>
   </footer>
 
