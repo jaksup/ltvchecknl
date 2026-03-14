@@ -3,8 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Betaal jij te veel hypotheekrente?</title>
-<meta name="description" content="Controleer in 1 minuut of je recht hebt op een lagere hypotheekrente. Volledig anoniem — we slaan niets op.">
+<title>LTV Check — Betaal jij te veel hypotheekrente?</title>
+<meta name="description" content="Bereken in 1 minuut of je woningwaarde is gestegen en je recht hebt op een lagere hypotheekrente. Gratis, anoniem, geen account nodig.">
+<meta name="keywords" content="hypotheekrente verlagen, LTV berekenen, risico-opslag, WOZ-waarde, hypotheek besparen, rente herzien">
+<meta name="robots" content="index, follow">
+<meta name="author" content="LTV Check">
+<link rel="canonical" href="https://www.ltvcheck.nl/">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.ltvcheck.nl/">
+<meta property="og:title" content="LTV Check — Betaal jij te veel hypotheekrente?">
+<meta property="og:description" content="Bereken in 1 minuut of je woningwaarde is gestegen en je recht hebt op een lagere hypotheekrente. Gratis en anoniem.">
+<meta property="og:locale" content="nl_NL">
+<meta property="og:locale:alternate" content="en_GB">
+
+<!-- Twitter/X card -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LTV Check — Betaal jij te veel hypotheekrente?">
+<meta name="twitter:description" content="Bereken of je recht hebt op een lagere hypotheekrente op basis van je actuele woningwaarde. Gratis, anoniem.">
+
 <!-- No external requests. No analytics. No cookies. System fonts only. -->
 <style>
 /* ── Reset ───────────────────────────────────────────────────── */
@@ -43,10 +61,24 @@ body {
 /* ── Layout ──────────────────────────────────────────────────── */
 .wrap { max-width: 580px; margin: 0 auto; }
 
+/* ── Logo ────────────────────────────────────────────────────── */
+.logo {
+  font-family: var(--font-serif);
+  font-size: 1.3rem;
+  letter-spacing: -0.03em;
+  color: var(--text);
+  user-select: none;
+}
+.logo span {
+  color: var(--accent);
+  font-style: italic;
+}
+
 /* ── Lang toggle ─────────────────────────────────────────────── */
 .topbar {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
   padding: 1.25rem 0 0;
   margin-bottom: 0.25rem;
 }
@@ -330,6 +362,9 @@ footer {
   font-size: 0.76rem; color: var(--muted); line-height: 1.65;
 }
 footer a { color: var(--accent); }
+.footer-row { margin-top: 0.5rem; }
+.footer-contact { font-size: 0.76rem; color: var(--muted); }
+.footer-contact .email-link { color: var(--accent); cursor: pointer; }
 .footer-privacy {
   display: flex; align-items: flex-start; gap: 0.5rem;
   background: var(--surface); border: 1px solid var(--border);
@@ -342,6 +377,7 @@ footer a { color: var(--accent); }
 <div class="wrap">
 
   <div class="topbar">
+    <div class="logo">ltv<span>check</span></div>
     <div class="lang-toggle">
       <button class="lang-btn active" onclick="setLang('nl')" id="btn-nl">NL</button>
       <button class="lang-btn" onclick="setLang('en')" id="btn-en">EN</button>
@@ -474,7 +510,15 @@ footer a { color: var(--accent); }
       <span>🔒</span>
       <span data-t="footer_privacy"></span>
     </div>
-    <span data-t="footer_legal"></span>
+    <div class="footer-row">
+      <span data-t="footer_legal"></span>
+    </div>
+    <div class="footer-row footer-contact">
+      <span data-t="footer_contact_label"></span>
+      <a href="#" class="email-link" id="email-link" onclick="revealEmail(event)">
+        <span data-t="footer_contact_show"></span>
+      </a>
+    </div>
   </footer>
 
 </div>
@@ -528,7 +572,7 @@ const T = {
     steps_title:    "Wat kun je nu doen?",
     steps: [
       ["1", "Download je WOZ-waarde als PDF",
-            'Ga naar <a href="https://www.wozwaardeloket.nl" target="_blank" rel="noopener">wozwaardeloket.nl</a>, zoek je adres op en sla de pagina op als PDF (in je browser: Afdrukken → Opslaan als PDF). Banken accepteren dit als officieel bewijs.'],
+            'Ga naar <a href="https://www.wozwaardeloket.nl" target="_blank" rel="noopener">wozwaardeloket.nl</a> en zoek je adres op. Klik dan op <strong>"Waardeontwikkeling"</strong> of de geschiedenis van je woningwaarde — daar vind je een knop om een officieel PDF-overzicht te downloaden. Dat is het bewijs dat je naar je bank stuurt.'],
       ["2", "Neem contact op met je bank",
             "Sommige banken hebben een optie in de app — zoek op 'renteherziening' of 'woningwaarde aanpassen'. Kun je het niet snel vinden? Geen stress. Stuur gewoon een berichtje via de chat in de app of bel ze op. Leg uit dat je woningwaarde is gestegen en je een tariefherziening wilt aanvragen."],
       ["3", "Dien een herzieningsverzoek in",
@@ -544,6 +588,8 @@ const T = {
     footer_legal:   "Indicatieve tool, geen hypotheekadvies. Tariefvoordeel geldt alleen bij hypotheken zonder NHG. · <a href=\"https://www.wozwaardeloket.nl\" target=\"_blank\" rel=\"noopener\">WOZ Waardeloket</a>",
     which_woz:  "WOZ-waarde",
     which_bank: "bankwaarde",
+    footer_contact_label: "Vragen? ",
+    footer_contact_show:  "Toon e-mailadres",
     print_btn:  "🖨 Sla op als PDF / Afdrukken",
   },
   en: {
@@ -592,8 +638,8 @@ const T = {
     savings_note:   "Rough estimate. Risk surcharges at Dutch banks typically range from 0.1 to 1 percentage point depending on your risk class. Your actual saving depends on your bank, product and mortgage contract.",
     steps_title:    "What can you do now?",
     steps: [
-      ["1", "Save your WOZ value as a PDF",
-            'Go to <a href="https://www.wozwaardeloket.nl" target="_blank" rel="noopener">wozwaardeloket.nl</a>, look up your address and save the page as a PDF (in your browser: Print → Save as PDF). Banks accept this as official proof.'],
+      ["1", "Download your WOZ value as a PDF",
+            'Go to <a href="https://www.wozwaardeloket.nl" target="_blank" rel="noopener">wozwaardeloket.nl</a> and look up your address. Then click on <strong>"Waardeontwikkeling"</strong> (value history) — you\'ll find a button there to download an official PDF overview. That\'s the document you send to your bank as proof.'],
       ["2", "Contact your bank",
             "Some banks have a dedicated option in their app — look for something like 'rate review' or 'update property value'. Can't find it quickly? No worries. Just send a message via the chat in the app or give them a call. Tell them your property value has gone up and you'd like to request a rate review."],
       ["3", "Submit a review request",
@@ -609,6 +655,8 @@ const T = {
     footer_legal:   "Indicative tool, not mortgage advice. Rate benefit only applies to mortgages without NHG. · <a href=\"https://www.wozwaardeloket.nl\" target=\"_blank\" rel=\"noopener\">WOZ Waardeloket</a>",
     which_woz:  "WOZ value",
     which_bank: "bank valuation",
+    footer_contact_label: "Questions? ",
+    footer_contact_show:  "Show email address",
     print_btn:  "🖨 Save as PDF / Print",
   }
 };
@@ -817,6 +865,17 @@ function calculate() {
     resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
     document.querySelector('.btn-print').classList.add('visible');
   }, 10);
+}
+
+// ── Email reveal (anti-spam obfuscation) ─────────────────────
+function revealEmail(e) {
+  e.preventDefault();
+  const p = ['ltv', 'check', '@', 'proton', 'mail', '.com'];
+  const addr = p.join('');
+  const link = document.getElementById('email-link');
+  link.href = 'mailto:' + addr;
+  link.textContent = addr;
+  link.onclick = null;
 }
 
 // ── Init ──────────────────────────────────────────────────────
