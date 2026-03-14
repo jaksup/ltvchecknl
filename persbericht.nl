@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Persbericht — LTV Check</title>
+<style>
+  @media print {
+    body { margin: 0; }
+    .no-print { display: none; }
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 11pt;
+    line-height: 1.7;
+    color: #1a1814;
+    background: #fff;
+    padding: 2cm 2.5cm;
+    max-width: 820px;
+    margin: 0 auto;
+  }
+
+  .letterhead {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 2px solid #2a6041;
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .logo-text {
+    font-size: 1.6rem;
+    letter-spacing: -0.02em;
+    color: #1a1814;
+  }
+  .logo-text span { color: #2a6041; font-style: italic; }
+
+  .meta {
+    text-align: right;
+    font-size: 9pt;
+    color: #7a7668;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+  }
+
+  .embargo {
+    background: #fefce8;
+    border: 1px solid #fcd34d;
+    border-radius: 6px;
+    padding: 0.5rem 0.9rem;
+    font-size: 9pt;
+    font-family: Arial, sans-serif;
+    color: #854d0e;
+    margin-bottom: 1.5rem;
+    display: inline-block;
+  }
+
+  h1 {
+    font-size: 18pt;
+    font-weight: bold;
+    line-height: 1.25;
+    margin-bottom: 0.4rem;
+    color: #1a1814;
+  }
+
+  .standfirst {
+    font-size: 12pt;
+    color: #4a4540;
+    font-style: italic;
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+    border-left: 3px solid #2a6041;
+    padding-left: 0.9rem;
+  }
+
+  h2 {
+    font-size: 11pt;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #2a6041;
+    margin: 1.5rem 0 0.4rem;
+    font-family: Arial, sans-serif;
+  }
+
+  p { margin-bottom: 0.85rem; }
+
+  .stat-block {
+    background: #f5f4f0;
+    border-left: 4px solid #2a6041;
+    padding: 0.75rem 1rem;
+    margin: 1rem 0;
+    font-family: Arial, sans-serif;
+    font-size: 10pt;
+  }
+  .stat-block strong { color: #2a6041; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    font-size: 10pt;
+    font-family: Arial, sans-serif;
+  }
+  th {
+    background: #2a6041;
+    color: white;
+    padding: 7px 10px;
+    text-align: left;
+    font-weight: 600;
+  }
+  td {
+    padding: 6px 10px;
+    border-bottom: 1px solid #e2dfd6;
+    vertical-align: top;
+  }
+  tr:nth-child(even) td { background: #f9f8f5; }
+
+  .quote {
+    border-left: 3px solid #2a6041;
+    padding: 0.6rem 1rem;
+    margin: 1rem 0;
+    color: #4a4540;
+    font-style: italic;
+  }
+  .quote cite {
+    display: block;
+    font-style: normal;
+    font-size: 9.5pt;
+    color: #7a7668;
+    margin-top: 0.3rem;
+    font-family: Arial, sans-serif;
+  }
+
+  .boilerplate {
+    border-top: 1px solid #e2dfd6;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    font-size: 9pt;
+    color: #7a7668;
+    font-family: Arial, sans-serif;
+  }
+
+  .contact-block {
+    margin-top: 1rem;
+    font-size: 9.5pt;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+  }
+
+  .btn-print {
+    display: block;
+    margin: 1.5rem auto;
+    padding: 0.6rem 1.5rem;
+    background: #2a6041;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+  }
+
+  .sitenav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0 0.75rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #e2dfd6;
+  }
+  .logo-nav {
+    font-family: Georgia, serif;
+    font-size: 1.2rem;
+    letter-spacing: -0.02em;
+    color: #1a1814;
+    text-decoration: none;
+  }
+  .logo-nav span { color: #2a6041; font-style: italic; }
+  .back-link {
+    font-family: Arial, sans-serif;
+    font-size: 0.8rem;
+    color: #7a7668;
+    text-decoration: none;
+  }
+  .back-link:hover { color: #2a6041; }
+</style>
+</head>
+<body>
+
+<div class="sitenav no-print">
+  <a href="index.html" class="logo-nav">ltv<span>check</span></a>
+  <a href="index.html" class="back-link">← Terug naar de tool</a>
+</div>
+
+<button class="btn-print no-print" onclick="window.print()">🖨 Afdrukken / Opslaan als PDF</button>
+
+<!-- Letterhead -->
+<div class="letterhead">
+  <div class="logo-text">ltv<span>check</span></div>
+  <div class="meta">
+    <strong>PERSBERICHT</strong><br>
+    Datum: maart 2026<br>
+    Verspreiding: vrij voor publicatie<br>
+    Website: ltvcheck.nl
+  </div>
+</div>
+
+<div class="embargo">VRIJ VOOR PUBLICATIE</div>
+
+<!-- Headline -->
+<h1>Miljoenen Nederlanders betalen te veel hypotheekrente — gratis tool laat zien of jij er ook bij zit</h1>
+
+<p class="standfirst">Woningwaarden stegen dit jaar gemiddeld 5% volgens het CBS — het tiende jaar op rij. Toch vraagt het overgrote deel van de huiseigenaren nooit om een renteherziening. LTV Check is een nieuwe, volledig gratis en anonieme tool die in minder dan een minuut berekent of iemand recht heeft op een lager hypotheektarief.</p>
+
+<!-- Introductie -->
+<h2>Introductie</h2>
+
+<p>De gemiddelde WOZ-waarde van een Nederlandse woning bedraagt in 2025 € 398.000 — 5 procent meer dan een jaar eerder, aldus het Centraal Bureau voor de Statistiek (CBS). Over de afgelopen vier jaar steeg de WOZ-waarde per vierkante meter landelijk met maar liefst 41 procent. In sommige regio's is die stijging nog forser: in Lelystad 65 procent, in Den Helder 62 procent, en in Limburg op provincieniveau 7,6 procent in het afgelopen jaar alleen.</p>
+
+<p>Wat veel huiseigenaren niet weten: een hogere woningwaarde kan direct leiden tot een lagere hypotheekrente. De hypotheekrente bij de meeste Nederlandse banken bestaat namelijk uit een basisrente plus een risico-opslag die afhankelijk is van de verhouding tussen hypotheekschuld en woningwaarde — de zogenoemde Loan-to-Value (LTV). Daalt die verhouding doordat de woning meer waard wordt, dan kan de risico-opslag omlaag. Dit voordeel geldt uitsluitend voor hypotheken zónder Nationale Hypotheek Garantie (NHG).</p>
+
+<div class="stat-block">
+  <strong>Kerncijfers (CBS, Waarderingskamer, 2025/2026):</strong><br>
+  • Gemiddelde WOZ-waarde 2025: <strong>€ 398.000</strong> (+5% t.o.v. 2024)<br>
+  • Stijging WOZ per m² over 4 jaar: <strong>+41%</strong> landelijk<br>
+  • Sterkste stijging gemeente 2025: Leidschendam-Voorburg <strong>+14,1%</strong><br>
+  • Stijging WOZ tussen 1 jan 2024 en 1 jan 2025: <strong>+10,6%</strong> landelijk gemiddelde (Waarderingskamer)<br>
+  • Totale hypotheekschuld Nederlandse huishoudens eind 2024: <strong>€ 851 miljard</strong>
+</div>
+
+<!-- Waarom nu -->
+<h2>Waarom dit nu relevant is</h2>
+
+<p>Ondanks jaren van waardestijging vragen de meeste huiseigenaren nooit actief om een herziening van hun risico-opslag. Banken zijn niet verplicht dit automatisch door te voeren — het initiatief ligt bij de klant. Het resultaat: veel mensen betalen maandelijks meer rente dan strikt noodzakelijk is, simpelweg omdat ze de stap niet zetten of niet weten hoe.</p>
+
+<p>De risico-opslag bij Nederlandse hypotheekverstrekkers loopt typisch op van 0,1 tot 1 procentpunt afhankelijk van de LTV-klasse. Op een gemiddelde hypotheekschuld van € 300.000 betekent zelfs een verlaging van 0,25 procentpunt een besparing van ruim € 60 per maand, ofwel meer dan € 750 per jaar — zonder oversluiting, zonder notariskosten.</p>
+
+<!-- Leeftijdsgroepen -->
+<h2>Het verschil per levensfase</h2>
+
+<p>De relevantie van een LTV-check verschilt sterk per leeftijdsgroep. Onderstaande tabel geeft een indicatief overzicht op basis van CBS-gegevens en marktcijfers:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Leeftijdsgroep</th>
+      <th>Typische situatie</th>
+      <th>Waarom LTV-check relevant?</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>30–40 jaar</strong><br><em>Starters / jonge doorstromers</em></td>
+      <td>Gemiddelde LTV ~64% bij starters (2025). Gemiddeld € 237.500 hypotheek bij een woningwaarde van € 382.500 voor 30-jarigen (CBS 2023).</td>
+      <td>Woningwaarde is snel gestegen na aankoop. Zelfs een kleine daling van de LTV kan al een tariefverbetering opleveren. Ook bewustwording: veel starters weten niet dat dit bestaat.</td>
+    </tr>
+    <tr>
+      <td><strong>40–55 jaar</strong><br><em>Doorstromers, gezinnen</em></td>
+      <td>Hypotheekschuld piek. Tweeverdieners 45–54 jaar kunnen gemiddeld maximaal € 532.000 lenen (2025). Aflossingen zijn enkele jaren onderweg.</td>
+      <td>Combinatie van jaren aflossing én gestegen woningwaarde maakt dit de meest kansrijke groep. Elk jaar dat men wacht is potentieel renteverlies. Grootste absolute besparingen mogelijk.</td>
+    </tr>
+    <tr>
+      <td><strong>55–70 jaar</strong><br><em>Pre-pensioen</em></td>
+      <td>86% van de 55-plussers heeft een aflossingsvrije hypotheek. Woningwaarde hoog, hypotheekschuld relatief laag door jaren van aflossing en prijsstijging.</td>
+      <td>LTV is in veel gevallen al sterk gedaald. Toch vragen velen nooit actief om aanpassing. Een gemiddelde 85-plusser had in 2023 nog een hypotheek van € 36.500 bij een woningwaarde van gemiddeld € 461.000 (CBS) — LTV van nog geen 8%.</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Over LTV Check -->
+<h2>Over LTV Check</h2>
+
+<p>LTV Check (ltvcheck.nl) is een gratis, anonieme webtool die huiseigenaren in minder dan een minuut laat zien of hun LTV-verhouding is verbeterd ten opzichte van de waarde die hun bank hanteert. De tool vraagt om drie gegevens: de actuele WOZ-waarde (gratis op te zoeken via wozwaardeloket.nl), de waarde die de bank als laatste gebruikte, en het openstaande hypotheeksaldo. Meerdere hypotheekdelen kunnen worden ingevoerd.</p>
+
+<p>De tool slaat geen gegevens op, gebruikt geen cookies en vraagt geen adres. Alle berekeningen vinden lokaal in de browser van de gebruiker plaats. Bezoekersaantallen worden bijgehouden via GoatCounter — een privacyvriendelijke teller zonder persoonlijke data.</p>
+
+<div class="quote">
+  "Veel mensen weten niet dat ze dit gewoon aan hun bank kunnen vragen. Je hebt geen adviseur nodig, geen advocaat, geen oversluiting. Soms is één e-mail genoeg. LTV Check geeft je het getal dat je nodig hebt om dat gesprek te starten."
+  <cite>— LTV Check</cite>
+</div>
+
+<!-- Praktisch -->
+<h2>Hoe het werkt — stap voor stap</h2>
+
+<p><strong>1.</strong> Ga naar wozwaardeloket.nl en zoek de WOZ-waarde op via het adres. Klik op de waardeontwikkeling voor een officiële PDF. <strong>2.</strong> Vul op ltvcheck.nl de WOZ-waarde, de bankwaarde en het hypotheeksaldo in. <strong>3.</strong> De tool berekent de huidige LTV-verhouding en laat zien of die is gedaald. <strong>4.</strong> Als de LTV is verbeterd, volgen concrete vervolgstappen: welk bewijs mee te sturen en hoe de bank te benaderen.</p>
+
+<p>Of en in hoeverre een bank de risico-opslag verlaagt hangt af van de specifieke voorwaarden in het hypotheekcontract. Sommige banken passen dit door tijdens de rentevaste periode, andere pas bij het verlopen ervan. De tool maakt dit expliciet duidelijk en presenteert de uitkomst als een berekend LTV-getal — geen definitieve verdict, maar een concreet startpunt voor een gesprek met de bank.</p>
+
+<!-- Boilerplate -->
+<div class="boilerplate">
+  <strong>Over LTV Check</strong><br>
+  LTV Check is een onafhankelijke, niet-commerciële webtool voor Nederlandse huiseigenaren met een hypotheek zonder NHG. De tool geeft een indicatie en vervangt geen professioneel hypotheekadvies. Tariefwijzigingen zijn afhankelijk van de voorwaarden van de individuele hypotheekverstrekker.
+
+  <div class="contact-block">
+    <strong>Contactgegevens pers</strong><br>
+    Website: <a href="https://ltvcheck.nl">ltvcheck.nl</a><br>
+    E-mail: beschikbaar via de contactknop op de website (anti-spam beschermd)<br>
+    Bronnen: CBS (cbs.nl), Waarderingskamer (waarderingskamer.nl), Van Bruggen Adviesgroep, HomeFinance, HDN
+  </div>
+</div>
+
+<button class="btn-print no-print" onclick="window.print()">🖨 Afdrukken / Opslaan als PDF</button>
+
+</body>
+</html>
